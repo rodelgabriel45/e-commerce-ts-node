@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.route';
+import productRoutes from './routes/product.route';
 
 const app: Express = express();
 dotenv.config();
@@ -18,6 +19,7 @@ export interface CustomError extends Error {
 
 // API routes
 app.use('/api/auth', authRoutes);
+app.use('/api/products', productRoutes);
 
 // Error handling middleware
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
