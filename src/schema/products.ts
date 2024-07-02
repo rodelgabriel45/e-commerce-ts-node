@@ -9,7 +9,7 @@ export const productSchema = z.object({
     required_error: 'Price is required',
     invalid_type_error: 'Price must be a number',
   }),
-  tags: z.string().array().optional(),
+  tags: z.string({ required_error: 'A product need at least 1 tag' }).array(),
 });
 
 export const updateProductSchema = z.object({

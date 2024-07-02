@@ -42,9 +42,15 @@ export const getProducts = async (
   next: NextFunction
 ) => {
   try {
-    const products = await prisma.product.findMany();
+    const skip = parseInt(req.query.skip as string) || 0;
 
-    res.status(200).json(products);
+    const count = await prisma.product.count();
+    const products = await prisma.product.findMany({
+      skip,
+      take: 5,
+    });
+
+    res.status(200).json({ count, data: products });
   } catch (error) {
     const err = error as CustomError;
     next(err);
@@ -86,7 +92,9 @@ export const deleteProduct = async (
       where: { id: parseInt(req.params.id) },
     });
 
-    res.status(200).json(deletedProduct);
+    res
+      .status(200)
+      .json({ message: 'Product deleted successfully', data: deletedProduct });
   } catch (error) {
     const err = error as CustomError;
     next(err);
@@ -108,6 +116,10 @@ export const updateProduct = async (
     if (!validation.success) {
       const error = validation.error.errors.map((err) => err.message);
       return next(errorHandler(400, error[0]));
+    }
+
+    if (req.body.tags) {
+      req.body.tags = req.body.tags.join(',');
     }
 
     const updatedProduct = await prisma.product.update({
