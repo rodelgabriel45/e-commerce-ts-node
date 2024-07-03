@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import authRoutes from './routes/auth.route';
 import productRoutes from './routes/product.route';
 import userRoutes from './routes/user.route';
+import cartRoutes from './routes/cart.route';
 
 const app: Express = express();
 dotenv.config();
@@ -22,6 +23,7 @@ export interface CustomError extends Error {
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/cart', cartRoutes);
 
 // Error handling middleware
 app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
